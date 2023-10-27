@@ -2,7 +2,7 @@
 
 This is a web application using the GPT API and Streamlit to search for past maritime accidents similar to near-miss reports. Although this program is developed with a Japanese interface, there are plans for multilingual support. (The timeline for this is uncertain.) The below details are provided in Japanese. If you are interested, please get in touch. I hope you find it intriguing.　The license for this project is MIT.
 
-このWEBアプリケーションは、[船学] (https://fune-gaku.com)と日本船長協会の月報のタイアップ企画のデモ・プログラムです。
+このWEBアプリケーションは、[船学](https://fune-gaku.com)と日本船長協会の月報のタイアップ企画のデモ・プログラムです。
 以下の手順でセットアップして利用できます。
 
 ## セットアップ
