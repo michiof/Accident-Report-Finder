@@ -1,16 +1,14 @@
 # Accident Report Finder
 
-This is a web application using the GPT API and Streamlit to search for past maritime accidents similar to near-miss reports. Although this program is developed with a Japanese interface, there are plans for multilingual support. (The timeline for this is uncertain.) The below details are provided in Japanese. If you are interested, please get in touch. I hope you find it intriguing.　The license for this project is MIT.
+This is a web application using the GPT API and Streamlit to search for past maritime accidents similar to near-miss reports. Although this program is developed with a Japanese interface, there are plans for multilingual support. (The timeline for this is uncertain.) The below details are provided in Japanese. If you are interested, please get in touch. I hope you find it intriguing.
 
-このWEBアプリケーションは、[船学](https://fune-gaku.com)と日本船長協会の月報のタイアップ企画のデモ・プログラムです。
+[船学](https://fune-gaku.com)と日本船長協会の月報のタイアップ企画のデモ・プログラムです。
 以下の手順でセットアップして利用できます。
 
 ## セットアップ
-1. OpenAIのAPIキーを取得する。
-2. .env.exmpleを.envにファイル名を変更して保存します。
-3. 名前変更した.env開き、OPENAI_API_KEY= に続けてAPIキーを入力し保存します。
-4. `pip install -r requirements_for_main.txt`または`pip3 install -r requirements_for_main.txt`で必要なモジュールをインストールします。
-5. ターミナル(Mac)またはコマンドプロンプト(Windows)を開き、次のコマンドを実行します。`streamlit run main.py`
+1. OpenAIのAPIキーを.envに保存する。
+2. requirements_for_main.txtに記載のモジュールをインストールします。
+3. ターミナル(Mac)またはコマンドプロンプト(Windows)を開き、次のコマンドを実行します。`streamlit run main.py`
 
 ## 利用方法
 セットアップ完了後、
