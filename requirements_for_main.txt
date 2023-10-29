@@ -3,6 +3,6 @@ pandas
 scipy
 chardet
 python-dotenv
-openai
+openai==0.27.7
 tiktoken
 datetime
