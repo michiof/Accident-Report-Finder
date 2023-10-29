@@ -66,7 +66,7 @@ def get_relevant_data(query_embedding, top_k=10):
                 relevant_data += next_relevant_data
         return relevant_data
     except Exception as e:
-        st.warning(f"Embeddings計算中にエラーが発生しました。もう一度お試しください: {e}")
+        st.warning(f"データベース検索中にエラーが発生しました。もう一度お試しください: {e}")
         return False
 
 # Embeddingsの計算
