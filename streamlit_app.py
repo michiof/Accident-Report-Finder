@@ -6,8 +6,6 @@ import pinecone
 import tiktoken
 
 openai.api_key = st.secrets["OPENAI_API_KEY"]
-pinecone.init(api_key=st.secrets["PINECONE_API_KEY"], environment=st.secrets["PINECONE_ENVIRONMENT"])
-pinecone_index = pinecone.Index(st.secrets["PINECONE_INDEX"])
 
 # OpenAIのモデルの定義
 EMBEDDING_MODEL = "text-embedding-ada-002"
@@ -56,6 +54,8 @@ def get_metadata(match):
 
 # 類似ベクトルデータの抽出
 def get_relevant_data(query_embedding, top_k=10):
+    pinecone.init(api_key=st.secrets["PINECONE_API_KEY"], environment=st.secrets["PINECONE_ENVIRONMENT"])
+    pinecone_index = pinecone.Index(st.secrets["PINECONE_INDEX"])
     token_budget = 4096 - 1500 #関連データのトークン上限値の設定
     relevant_data = ""
     for _ in range(3): # エラー発生時は3回までトライする
