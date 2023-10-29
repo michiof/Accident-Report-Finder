@@ -1,0 +1,8 @@
+streamlit
+pandas
+scipy
+chardet
+python-dotenv
+openai
+tiktoken
+datetime
