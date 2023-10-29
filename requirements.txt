@@ -1,5 +1,5 @@
 streamlit
 pandas
-openai
-pinecone
+openai==0.27.7
+pinecone-client==2.2.1
 tiktoken
