@@ -132,7 +132,7 @@ def chat_page():
 def main():
     st.title('🔍 Accident Report Finder')
     st.caption('入力した事故原因と類似する過去の船舶事故を検索できます。')
-    st.caption('運輸安全委員会が公開している14,875件(2023年6月時点)の船舶事故報告書データを本プログラムの検索用に加工して利用しています。')
+    st.caption('運輸安全委員会が公開している14,875件(2023年6月時点)の船舶事故報告書データを本プログラム用に加工して利用しています。')
     st.caption('データ出典：[運輸安全委員会](https://jtsb.mlit.go.jp/jtsb/ship/index.php)')
     st.write('---')
 
