@@ -52,33 +52,34 @@ def get_metadata(match):
 def get_relevant_data(query_embedding, top_k=10):
     token_budget = 4096 - 1500 #関連データのトークン上限値の設定
     relevant_data = ""
-    try:
-        results = pinecone_index.query(vector=query_embedding, top_k=top_k, include_metadata=True)
-        for i, match in enumerate(results["matches"], start=1):
-            metadata = get_metadata(match)
-            next_relevant_data = f'\n\nRelevant data {i}:\n{metadata}'
-            if (
-                num_tokens(relevant_data + next_relevant_data, model=GPT_MODEL)
-                > token_budget
-            ):
-                break
-            else:
-                relevant_data += next_relevant_data
-        return relevant_data
-    except Exception as e:
-        print(str(e))
-        st.warning(f"データベース検索中にエラーが発生しました。もう一度お試しください。")
-        return False
+    for _ in range(3): # エラー発生時は3回までトライする
+        try:
+            results = pinecone_index.query(vector=query_embedding, top_k=top_k, include_metadata=True)
+            for i, match in enumerate(results["matches"], start=1):
+                metadata = get_metadata(match)
+                next_relevant_data = f'\n\nRelevant data {i}:\n{metadata}'
+                if (
+                    num_tokens(relevant_data + next_relevant_data, model=GPT_MODEL)
+                    > token_budget
+                ):
+                    break
+                else:
+                    relevant_data += next_relevant_data
+            return relevant_data
+        except Exception as e:
+            print(f"Error: {str(e)}")
+            continue
+    raise Exception("Error: Failed to retrieve relevant data after 3 attempts")
 
 # Embeddingsの計算
 def cal_embedding(user_input, model=EMBEDDING_MODEL):
-    try:
-        embedding = openai.Embedding.create(input=user_input, model=model)["data"][0]["embedding"]
-        return embedding
-    except Exception as e:
-        print(str(e))
-        st.warning(f"Embeddings計算中にエラーが発生しました。もう一度お試しください。")
-        return False
+    for _ in range(3): # エラー発生時は3回までトライする
+        try:
+            return openai.Embedding.create(input=user_input, model=model)["data"][0]["embedding"]
+        except Exception as e:
+            print(f"Error: {str(e)}")
+            continue
+    raise Exception("Failed to calculate embedding after 3 attempts")
 
 # 検索画面での処理
 def chat_page():
@@ -86,13 +87,12 @@ def chat_page():
     
     if st.button('検索'):
         if new_msg:
-            with st.spinner('検索中...'):
-                user_input = f'検索する原因: {new_msg}'
-                user_input_emb = cal_embedding(new_msg)
-                CHAT_INPUT_MESSAGES = make_message(user_input, user_input_emb)
-
-            # 文章生成中はtemp_placeholderにストリーミングで表示
             try:
+                with st.spinner('検索中...'):
+                    user_input = f'検索する原因: {new_msg}'
+                    user_input_emb = cal_embedding(new_msg)
+                    CHAT_INPUT_MESSAGES = make_message(user_input, user_input_emb)
+                    
                 with st.spinner('文章生成中...'):
                     response_all = ""
                     temp_placeholder = st.empty()
