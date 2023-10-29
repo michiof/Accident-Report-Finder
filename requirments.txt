@@ -1,8 +1,5 @@
 streamlit
 pandas
-scipy
-chardet
-python-dotenv
 openai
+pinecone
 tiktoken
-datetime
