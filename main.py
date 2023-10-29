@@ -221,11 +221,10 @@ def main():
     else:
         related_data_df = pd.read_csv(filepath_emb)
         os.makedirs(dir_log, exist_ok=True) #Logディレクトリがない場合は作成
-        page = st.radio("Menu", ["検索画面", "データ準備画面"], label_visibility="collapsed")
-        st.write('---')
-        if page == "検索画面":
+        tab_chat, tab_import_file = st.tabs(["検索画面", "データ準備画面"])
+        with tab_chat:
             chat_page(related_data_df)
-        elif page == "データ準備画面":
+        with tab_import_file:
             csv_import_page()
 
 if __name__ == '__main__':
