@@ -112,17 +112,21 @@ def chat_page():
 
     st.write('---')
     st.write('検索履歴:')
+    output_messages = ""
     for message in reversed(st.session_state.messages):
         st.write(message)
+        output_messages += message + '\n\n'
 
     # 履歴のクリアボタン
     if st.button('履歴のクリア'):
         st.session_state.messages = []
         st.empty()
+    
+    st.download_button('検索結果を保存', output_messages)
 
 def main():
     st.title('🔍 Accident Report Finder =beta=')
-    st.write('入力した文章と原因が類似する過去の船舶事故を検索できます。')
+    st.write('入力した事故原因と類似する過去の船舶事故を検索できます。')
     st.write('運輸安全委員会が公開している14,875件の船舶事故報告書(2023年6月時点)を本プログラムの検索用に加工して利用しています。')
     st.write('出典：[運輸安全委員会ホームページ: 報告書検索](https://jtsb.mlit.go.jp/jtsb/ship/index.php)')
     st.write('---')
