@@ -66,7 +66,8 @@ def get_relevant_data(query_embedding, top_k=10):
                 relevant_data += next_relevant_data
         return relevant_data
     except Exception as e:
-        st.warning(f"データベース検索中にエラーが発生しました。もう一度お試しください: {e}")
+        print(str(e))
+        st.warning(f"データベース検索中にエラーが発生しました。もう一度お試しください。")
         return False
 
 # Embeddingsの計算
@@ -75,7 +76,8 @@ def cal_embedding(user_input, model=EMBEDDING_MODEL):
         embedding = openai.Embedding.create(input=user_input, model=model)["data"][0]["embedding"]
         return embedding
     except Exception as e:
-        st.warning(f"Embeddings計算中にエラーが発生しました。もう一度お試しください: {e}")
+        print(str(e))
+        st.warning(f"Embeddings計算中にエラーが発生しました。もう一度お試しください。")
         return False
 
 # 検索画面での処理
@@ -105,7 +107,8 @@ def chat_page():
                 temp_placeholder.empty() #Stream部分の非表示
                 st.empty()
             except Exception as e:
-                st.error(f"再度検索してください。エラーが発生しました: {str(e)}")
+                print(str(e))
+                st.error(f"再度検索してください。エラーが発生しました。")
 
     st.write('---')
     st.write('検索履歴:')
