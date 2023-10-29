@@ -136,6 +136,16 @@ def main():
     st.write('データ出典：[運輸安全委員会](https://jtsb.mlit.go.jp/jtsb/ship/index.php)')
     st.write('---')
 
+    st.sidebar.title("Accident Report Finder")
+    with st.sidebar:
+        st.write('Version: 1.0.0')
+        st.write('Made by [Michio Fujii](https://github.com/michiof)')
+        st.write('---')
+        st.write('A search tool for maritime accident reports using GPT and vector search technology.')
+        st.write('The program uses processed data from the maritime accident reports published by the Japan Transport Safety Board.')
+        st.write('The data consists of 14,875 records obtained in June 2023.')
+
+
     # メッセージのリストを維持する
     if 'messages' not in st.session_state:
         st.session_state.messages = []
