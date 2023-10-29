@@ -13,6 +13,12 @@ pinecone_index = pinecone.Index(st.secrets["PINECONE_INDEX"])
 EMBEDDING_MODEL = "text-embedding-ada-002"
 GPT_MODEL = "gpt-3.5-turbo"
 
+# Streamlit setup
+st.set_page_config(
+   page_title="Accident Report Finder",
+   page_icon="🔍",
+)
+
 # プロンプトを作成する
 def make_message(user_input, user_input_emb):
     related_data = get_relevant_data(user_input_emb)
@@ -92,7 +98,6 @@ def chat_page():
                     user_input = f'検索する原因: {new_msg}'
                     user_input_emb = cal_embedding(new_msg)
                     CHAT_INPUT_MESSAGES = make_message(user_input, user_input_emb)
-                    
                 with st.spinner('文章生成中...'):
                     response_all = ""
                     temp_placeholder = st.empty()
@@ -125,10 +130,10 @@ def chat_page():
     st.download_button('検索結果を保存', output_messages)
 
 def main():
-    st.title('🔍 Accident Report Finder =beta=')
+    st.title('🔍 Accident Report Finder')
     st.write('入力した事故原因と類似する過去の船舶事故を検索できます。')
-    st.write('運輸安全委員会が公開している14,875件の船舶事故報告書(2023年6月時点)を本プログラムの検索用に加工して利用しています。')
-    st.write('出典：[運輸安全委員会ホームページ: 報告書検索](https://jtsb.mlit.go.jp/jtsb/ship/index.php)')
+    st.write('運輸安全委員会が公開している14,875件の船舶事故報告書(2023年6月時点)データを本プログラムの検索用に加工して利用しています。')
+    st.write('出典：[運輸安全委員会ホームページ](https://jtsb.mlit.go.jp/jtsb/ship/index.php)')
     st.write('---')
 
     # メッセージのリストを維持する
