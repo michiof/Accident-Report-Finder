@@ -92,7 +92,7 @@ def chat_page(related_data_df):
     new_msg = st.text_input('ヒヤリハットを入力してください。')
     
     if st.button('検索'):
-        if not os.path.exists('output.csv'):
+        if not os.path.exists(filepath_emb):
             st.warning('参照データがありません。データ準備画面で設定してください。')
             return
         
@@ -160,17 +160,17 @@ def csv_import_page(reload=False):
             emb_row = None
             
             # ラジオボタンを使用して検索方法を選択
-            search_method = st.radio("検索方法を選択してください:", ("概要の類似性を検索", "原因の類似性を検索"))
+            search_method = st.radio("検索方法を選択してください:", ("原因の類似性を検索", "概要の類似性を検索"))
 
-            if search_method == "概要の類似性を検索":
-                if '概要' in df.columns:
-                    emb_row = '概要'
-                else:
-                    st.warning("読み込んだファイルに '概要' というカラムが存在しません。")
-            elif search_method == "原因の類似性を検索":
+            if search_method == "原因の類似性を検索":
                 emb_row = '原因'
                 if '原因' in df.columns:
                     emb_row = '原因'
+                else:
+                    st.warning("読み込んだファイルに '概要' というカラムが存在しません。")
+            elif search_method == "概要の類似性を検索":
+                if '概要' in df.columns:
+                    emb_row = '概要'
                 else:
                     st.warning("読み込んだファイルに '概要' というカラムが存在しません。")
             
