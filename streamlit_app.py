@@ -1,4 +1,5 @@
 # For Streamlit online app
+
 import streamlit as st
 import pandas as pd
 import openai
@@ -21,8 +22,8 @@ st.set_page_config(
 def make_message(user_input, user_input_emb):
     related_data = get_relevant_data(user_input_emb)
     messages = [
-        {"role": "system", "content": '関連データの内容を読み取って、ユーザーが入力した事故原因と原因が類似している事故を見つけます。'},
-        {"role": "user", "content": f'''
+        {"role": "system", "content": "関連データの内容を読み取って、ユーザーが入力した事故原因と原因が類似している事故を見つけます。"},
+        {"role": "user", "content": f"""
             以下のユーザーが入力した事故原因と事故の原因が類似した事故を関連データから3つ見つけ出し、以下に指定する出力フォーマットで出力してください。\n\n
             ユーザーが入力した事故原因：\n
             {user_input}\n\n
@@ -36,7 +37,7 @@ def make_message(user_input, user_input_emb):
             事故の概要：\n<Outline>\n\n
             事故の原因：\n<Cause>\n\n
             報告書のURL: \n<URL>\n\n
-        '''},
+        """},
     ]
     return messages
 
@@ -49,8 +50,8 @@ def num_tokens(text: str, model: str) -> int:
 def get_metadata(match):
     info = []
     for key, value in match["metadata"].items():
-        info.append(f'{key}: {value}\n')
-    return '\n'.join(info)
+        info.append(f"{key}: {value}\n")
+    return "\n".join(info)
 
 # 類似ベクトルデータの抽出
 def get_relevant_data(query_embedding, top_k=10):
@@ -63,7 +64,7 @@ def get_relevant_data(query_embedding, top_k=10):
             results = pinecone_index.query(vector=query_embedding, top_k=top_k, include_metadata=True)
             for i, match in enumerate(results["matches"], start=1):
                 metadata = get_metadata(match)
-                next_relevant_data = f'\n\nRelevant data {i}:\n{metadata}'
+                next_relevant_data = f"\n\nRelevant data {i}:\n{metadata}"
                 if (
                     num_tokens(relevant_data + next_relevant_data, model=GPT_MODEL)
                     > token_budget
@@ -89,24 +90,24 @@ def cal_embedding(user_input, model=EMBEDDING_MODEL):
 
 # 検索画面での処理
 def chat_page():
-    new_msg = st.text_input('検索したい事故原因を入力してください:（例）潮流が強く舵が効かなくなった。')
+    new_msg = st.text_input("検索したい事故原因を入力してください:（例）潮流が強く舵が効かなくなった。")
     
-    if st.button('検索'):
+    if st.button("検索"):
         if new_msg:
             try:
-                with st.spinner('検索中...'):
-                    user_input = f'検索する原因: {new_msg}'
+                with st.spinner("検索中..."):
+                    user_input = f"検索する原因: {new_msg}"
                     user_input_emb = cal_embedding(new_msg)
                     CHAT_INPUT_MESSAGES = make_message(user_input, user_input_emb)
-                with st.spinner('文章生成中...'):
+                with st.spinner("文章生成中..."):
                     response_all = ""
                     temp_placeholder = st.empty()
                     response = openai.ChatCompletion.create(model=GPT_MODEL,messages=CHAT_INPUT_MESSAGES, temperature=0.0, stream=True)
                     for chunk in response:
-                        response_delta = chunk['choices'][0]['delta'].get('content', '')
+                        response_delta = chunk["choices"][0]["delta"].get("content", "")
                         response_all += response_delta
                         temp_placeholder.write(response_all)
-                st.session_state.messages.append('---')
+                st.session_state.messages.append("---")
                 st.session_state.messages.append(response_all)
                 st.session_state.messages.append(user_input)
                 temp_placeholder.empty() #Stream部分の非表示
@@ -115,37 +116,33 @@ def chat_page():
                 print(str(e))
                 st.error(f"再度検索してください。エラーが発生しました。")
 
-    st.write('---')
-    st.write('検索履歴:')
+    st.write("---")
+    st.write("検索履歴:")
     output_messages = ""
     for message in reversed(st.session_state.messages):
         st.write(message)
-        output_messages += message + '\n\n'
+        output_messages += message + "\n\n"
 
     # 履歴のクリアボタン
-    if st.button('履歴のクリア'):
+    if st.button("履歴を消去"):
         st.session_state.messages = []
         st.empty()
     
-    st.download_button('検索結果を保存', output_messages)
+    st.download_button("検索結果を保存", output_messages)
 
 def main():
-    st.title('🔍 Accident Report Finder')
-    st.caption('入力した事故原因と類似する過去の船舶事故を検索できます。')
-    st.caption('運輸安全委員会が公開している14,875件(2023年6月時点)の船舶事故報告書データを本プログラム用に加工して利用しています。')
-    st.caption('データ出典：[運輸安全委員会](https://jtsb.mlit.go.jp/jtsb/ship/index.php)')
-    st.write('---')
-
+    st.title("🔍 Accident Report Finder")
+    st.caption("入力した事故原因と類似する過去の船舶事故を検索できます。")
+    st.caption("運輸安全委員会が公開している14,875件(2023年6月時点)の船舶事故報告書データを本プログラム用に加工して利用しています。")
+    st.caption("データ出典：[運輸安全委員会](https://jtsb.mlit.go.jp/jtsb/ship/index.php)")
+    st.write("---")
     st.sidebar.title("Accident Report Finder")
     with st.sidebar:
-        st.write('Version: 1.0.0')
-        st.write('Made by [Michio Fujii](https://github.com/michiof)')
-
-    # メッセージのリストを維持する
-    if 'messages' not in st.session_state:
+        st.write("Version: 1.0.0")
+        st.write("Made by [Michio Fujii](https://github.com/michiof)")
+    if "messages" not in st.session_state:
         st.session_state.messages = []
-
     chat_page()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
