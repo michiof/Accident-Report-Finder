@@ -136,7 +136,7 @@ def chat_page(related_data_df):
         st.success(f'検索結果が {file_name} に保存されました。')
 
     # 履歴のクリアボタン
-    if st.button('履歴のクリア'):
+    if st.button('履歴を消去'):
         st.session_state.messages = []
         st.empty()
 
