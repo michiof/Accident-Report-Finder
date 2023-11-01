@@ -205,6 +205,7 @@ def csv_import_page(reload=False):
 
 def main():
     st.title('🔍 Accident Report Finder')
+    st.caption("Made by [Michio Fujii](https://github.com/michiof)")
     st.write('入力したヒヤリハットと類似する過去の事故を検索できます。')
 
     # メッセージのリストを維持する
