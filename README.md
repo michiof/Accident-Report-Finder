@@ -7,8 +7,8 @@ This is a web application using the GPT API and Streamlit to search for past mar
 
 ## セットアップ
 1. OpenAIのAPIキーを.envに保存する。
-2. requirements_for_main.txtに記載のモジュールをインストールします。
-3. ターミナル(Mac)またはコマンドプロンプト(Windows)を開き、次のコマンドを実行します。`streamlit run main.py`
+2. requirements_for_main.txtに記載のモジュールをインストールする。
+3. ターミナル(Mac)またはコマンドプロンプト(Windows)を開き、次のコマンドを実行する。`streamlit run main.py`
 
 ## 利用方法
 セットアップ完了後、
