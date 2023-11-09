@@ -139,8 +139,6 @@ def main():
     with st.sidebar:
         st.write("Version: 1.0.0")
         st.write("Made by [Michio Fujii](https://github.com/michiof)")
-        st.write("---")
-        st.link_button("お問い合わせ", "https://fune-gaku.com/contact/")
     if "messages" not in st.session_state:
         st.session_state.messages = []
     chat_page()
