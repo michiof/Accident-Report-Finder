@@ -5,14 +5,14 @@ from scipy import spatial
 import chardet
 import os
 from dotenv import load_dotenv
-import openai
+from openai import OpenAI
 import ast
 import tiktoken
 import datetime
 
 # .envからAPIキーの読み込み
 load_dotenv('.env')
-openai.api_key = os.environ.get("OPENAI_API_KEY")
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"),)
 
 # OpenAIのモデルの定義
 EMBEDDING_MODEL = "text-embedding-ada-002"
@@ -81,7 +81,7 @@ def get_relevant_data(query_embedding, related_data_df, top_k=10):
 # Embeddingsの計算
 def cal_embedding(hiyari_hatto, model=EMBEDDING_MODEL):
     try:
-        embedding = openai.Embedding.create(input=hiyari_hatto, model=model)["data"][0]["embedding"]
+        embedding = client.embeddings.create(input=hiyari_hatto, model=model).data[0].embedding
         return embedding
     except Exception as e:
         st.warning(f"Embeddings計算中にエラーが発生しました。もう一度お試しください: {e}")
@@ -107,9 +107,9 @@ def chat_page(related_data_df):
                 with st.spinner('文章生成中...'):
                     response_all = ""
                     temp_placeholder = st.empty()
-                    response = openai.ChatCompletion.create(model=GPT_MODEL,messages=CHAT_INPUT_MESSAGES, temperature=0.0, stream=True)
-                    for chunk in response:
-                        response_delta = chunk['choices'][0]['delta'].get('content', '')
+                    stream = client.chat.completions.create(model=GPT_MODEL,messages=CHAT_INPUT_MESSAGES, temperature=0.0, stream=True)
+                    for part in stream:
+                        response_delta = (part.choices[0].delta.content or "")
                         response_all += response_delta
                         temp_placeholder.write(response_all)
                 st.session_state.messages.append('---')

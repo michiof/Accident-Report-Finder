@@ -1,5 +1,5 @@
 streamlit
 pandas
-openai < 1
+openai==1.2.1
 pinecone-client
 tiktoken
