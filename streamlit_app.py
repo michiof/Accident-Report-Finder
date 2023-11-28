@@ -2,11 +2,11 @@
 
 import streamlit as st
 import pandas as pd
-import openai
+from openai import OpenAI
 import pinecone
 import tiktoken
 
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"],)
 
 # OpenAIのモデルの定義
 EMBEDDING_MODEL = "text-embedding-ada-002"
@@ -82,7 +82,7 @@ def get_relevant_data(query_embedding, top_k=10):
 def cal_embedding(user_input, model=EMBEDDING_MODEL):
     for _ in range(3): # エラー発生時は3回までトライする
         try:
-            return openai.Embedding.create(input=user_input, model=model)["data"][0]["embedding"]
+            return client.embeddings.create(input=user_input, model=model).data[0].embedding
         except Exception as e:
             print(f"Error: {str(e)}")
             continue
@@ -102,9 +102,9 @@ def chat_page():
                 with st.spinner("文章生成中..."):
                     response_all = ""
                     temp_placeholder = st.empty()
-                    response = openai.ChatCompletion.create(model=GPT_MODEL,messages=CHAT_INPUT_MESSAGES, temperature=0.0, stream=True)
-                    for chunk in response:
-                        response_delta = chunk["choices"][0]["delta"].get("content", "")
+                    stream = client.chat.completions.create(model=GPT_MODEL,messages=CHAT_INPUT_MESSAGES, temperature=0.0, stream=True)
+                    for part in stream:
+                        response_delta = (part.choices[0].delta.content or "")
                         response_all += response_delta
                         temp_placeholder.write(response_all)
                 st.session_state.messages.append("---")
@@ -137,7 +137,7 @@ def main():
     st.write("---")
     st.sidebar.title("Accident Report Finder")
     with st.sidebar:
-        st.write("Version: 1.0.0")
+        st.write("Version: 1.0.1")
         st.write("Made by [Michio Fujii](https://github.com/michiof)")
     if "messages" not in st.session_state:
         st.session_state.messages = []
