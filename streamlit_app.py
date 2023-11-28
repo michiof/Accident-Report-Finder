@@ -90,7 +90,7 @@ def cal_embedding(user_input, model=EMBEDDING_MODEL):
 
 # 検索画面での処理
 def chat_page():
-    new_msg = st.text_input("検索したい事故原因を入力してください:（例）潮流が強く舵が効かなくなった。")
+    new_msg = st.text_area("検索したい事故原因を入力してください:", placeholder="潮流が強く舵が効かなくなった。")
     
     if st.button("検索"):
         if new_msg:
