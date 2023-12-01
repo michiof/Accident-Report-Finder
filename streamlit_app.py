@@ -53,15 +53,37 @@ def get_metadata(match):
         info.append(f"{key}: {value}\n")
     return "\n".join(info)
 
+# Multiselectionの値からPinecone用のフィルターを作成し、session_stateに保存する
+def make_pinecone_filter(filter_selection):
+    filter = []
+    if '軽微なものを除く' in filter_selection:
+        filter.append({"Severity": {"$in": ["2"]}})
+    if '小型船舶を除く' in filter_selection:
+        filter.append({"Cat_GrossTon": {"$in": ["Cat3"]}})
+    
+    if len(filter) > 1:
+        filter_dic_for_pinecone = {"$and": filter}
+    elif filter:
+        filter_dic_for_pinecone = filter[0]
+    else:
+        filter_dic_for_pinecone = {}
+    st.session_state['filter_dic'] = filter_dic_for_pinecone
+
 # 類似ベクトルデータの抽出
-def get_relevant_data(query_embedding, top_k=10):
+def get_relevant_data(query_embedding, top_k=20):
     pinecone.init(api_key=st.secrets["PINECONE_API_KEY"], environment=st.secrets["PINECONE_ENVIRONMENT"])
     pinecone_index = pinecone.Index(st.secrets["PINECONE_INDEX"])
     token_budget = 4096 - 1500 #関連データのトークン上限値の設定
     relevant_data = ""
+    filter_dic = st.session_state['filter_dic']
     for _ in range(3): # エラー発生時は3回までトライする
         try:
-            results = pinecone_index.query(vector=query_embedding, top_k=top_k, include_metadata=True)
+            results = pinecone_index.query(
+                            vector=query_embedding,
+                            filter=filter_dic,
+                            top_k=top_k, 
+                            include_metadata=True
+                        )
             for i, match in enumerate(results["matches"], start=1):
                 metadata = get_metadata(match)
                 next_relevant_data = f"\n\nRelevant data {i}:\n{metadata}"
@@ -141,7 +163,14 @@ def main():
         st.write("Made by [Michio Fujii](https://github.com/michiof)")
         st.write("---")
         
-        num_of_output = st.slider("最大検索件数", 0, 5, 3)
+        num_of_output = st.slider("最大検索件数", 1, 5, 3)
+
+        # filter設定
+        filter_selection = st.multiselect("フィルター",
+                                ['軽微なものを除く', '小型船舶を除く'],
+                                ['軽微なものを除く', '小型船舶を除く']
+                            )
+        make_pinecone_filter(filter_selection)
 
     if "messages" not in st.session_state:
         st.session_state.messages = []
