@@ -19,12 +19,12 @@ st.set_page_config(
 )
 
 # プロンプトを作成する
-def make_message(user_input, user_input_emb):
+def make_message(user_input, user_input_emb, num_of_output):
     related_data = get_relevant_data(user_input_emb)
     messages = [
         {"role": "system", "content": "関連データの内容を読み取って、ユーザーが入力した事故原因と原因が類似している事故を見つけます。"},
         {"role": "user", "content": f"""
-            以下のユーザーが入力した事故原因と事故の原因が類似した事故を関連データから3つ見つけ出し、以下に指定する出力フォーマットで出力してください。\n\n
+            以下のユーザーが入力した事故原因と事故の原因が類似した事故を関連データから{num_of_output}件見つけ出し、以下に指定する出力フォーマットで出力してください。\n\n
             ユーザーが入力した事故原因：\n
             {user_input}\n\n
             関連データ：\n
@@ -89,7 +89,7 @@ def cal_embedding(user_input, model=EMBEDDING_MODEL):
     raise Exception("Failed to calculate embedding after 3 attempts")
 
 # 検索画面での処理
-def chat_page():
+def chat_page(num_of_output):
     new_msg = st.text_area("検索したい事故原因を入力してください:", placeholder="潮流が強く舵が効かなくなった。")
     
     if st.button("検索"):
@@ -98,7 +98,7 @@ def chat_page():
                 with st.spinner("検索中..."):
                     user_input = f"検索する原因: {new_msg}"
                     user_input_emb = cal_embedding(new_msg)
-                    CHAT_INPUT_MESSAGES = make_message(user_input, user_input_emb)
+                    CHAT_INPUT_MESSAGES = make_message(user_input, user_input_emb, num_of_output)
                 with st.spinner("文章生成中..."):
                     response_all = ""
                     temp_placeholder = st.empty()
@@ -133,15 +133,19 @@ def chat_page():
 def main():
     st.title("🔍 Accident Report Finder")
     st.caption("入力した事故原因と類似する過去の船舶事故を検索できます。")
-    st.caption("データ出典: [運輸安全委員会](https://jtsb.mlit.go.jp/jtsb/ship/index.php)が公開している14,875件(2023年6月時点)の船舶事故報告書データを本プログラム用に加工して利用しています。")
+    st.caption("データ出典: [運輸安全委員会](https://jtsb.mlit.go.jp/jtsb/ship/index.php)が公開している15,334件(2023年12月1日時点)の船舶事故報告書データを本プログラム用に加工して利用しています。")
     st.write("---")
     st.sidebar.title("Accident Report Finder")
     with st.sidebar:
-        st.write("Version: 1.0.1")
+        st.write("Version: 1.1.0")
         st.write("Made by [Michio Fujii](https://github.com/michiof)")
+        st.write("---")
+        
+        num_of_output = st.slider("最大検索件数", 0, 5, 3)
+
     if "messages" not in st.session_state:
         st.session_state.messages = []
-    chat_page()
+    chat_page(num_of_output)
 
 if __name__ == "__main__":
     main()
