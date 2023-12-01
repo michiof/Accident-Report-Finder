@@ -121,7 +121,7 @@ def chat_page(num_of_output):
                     user_input = f"検索する原因: {new_msg}"
                     user_input_emb = cal_embedding(new_msg)
                     CHAT_INPUT_MESSAGES = make_message(user_input, user_input_emb, num_of_output)
-                with st.spinner("結果生成中..."):
+                with st.spinner("検索結果を出力中..."):
                     response_all = ""
                     temp_placeholder = st.empty()
                     stream = client.chat.completions.create(model=GPT_MODEL,messages=CHAT_INPUT_MESSAGES, temperature=0.0, stream=True)
