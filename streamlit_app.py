@@ -112,7 +112,7 @@ def cal_embedding(user_input, model=EMBEDDING_MODEL):
 
 # 検索画面での処理
 def chat_page(num_of_output):
-    new_msg = st.text_area("検索したい事故原因を入力してください:", placeholder="潮流が強く舵が効かなくなった。")
+    new_msg = st.text_input("検索したい事故原因を入力してください:", placeholder="潮流が強く舵が効かなくなった。")
     
     if st.button("検索"):
         if new_msg:
@@ -121,7 +121,7 @@ def chat_page(num_of_output):
                     user_input = f"検索する原因: {new_msg}"
                     user_input_emb = cal_embedding(new_msg)
                     CHAT_INPUT_MESSAGES = make_message(user_input, user_input_emb, num_of_output)
-                with st.spinner("文章生成中..."):
+                with st.spinner("結果生成中..."):
                     response_all = ""
                     temp_placeholder = st.empty()
                     stream = client.chat.completions.create(model=GPT_MODEL,messages=CHAT_INPUT_MESSAGES, temperature=0.0, stream=True)
