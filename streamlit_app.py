@@ -161,6 +161,9 @@ def chat_page(num_of_output, language):
         msg_gen_result = "Outputting search results..."
         error_message = "Please search again. An error has occurred."
 
+    new_msg = st.text_input(label_msg_text_area, value=st.session_state.sample_question, placeholder=placeholder_text_area)
+    if st.button(lable_load_sample):
+        st.session_state.sample_question = placeholder_text_area # load a sample question
     if st.button(label_search_botton):
         if new_msg:
             try:
@@ -238,6 +241,9 @@ def main():
 
     if "messages" not in st.session_state:
         st.session_state['messages']= []
+    if 'sample_question' not in st.session_state:
+        st.session_state['sample_question'] = ""
+
     chat_page(num_of_output, language)
 
 if __name__ == "__main__":
