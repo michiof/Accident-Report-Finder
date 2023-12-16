@@ -47,9 +47,9 @@ def make_message(user_input, user_input_emb, num_of_output, language):
         messages = [
             {"role": "system", "content": "Read the content of the relevant data and find accidents that are similar to the cause of the accident entered by the user."},
             {"role": "user", "content": f"""
-                Find {num_of_output} accidents from the related data that are similar cause to the following user input, and output them in the specified output format below.\n
+                Please find {num_of_output} accidents from the Related data that are similar to the User input in terms of "cause of the accident". Then, output them in order of similarity, in the specified output format below.\n
                 If related data is written in Japanese, please trnslate them to English and output.\n\n
-                Cause of the accident entered by the user:\n
+                User input:\n
                 {user_input}\n\n
                 Related data:\n
                 {related_data}\n\n
@@ -150,7 +150,7 @@ def chat_page(num_of_output, language):
         error_message = "再度検索してください。エラーが発生しました。"
     else:
         label_msg_text_area = "Please enter the cause of the accident you want to search for:"
-        placeholder_text_area = "The tidal current was strong, and the rudder became ineffective."
+        placeholder_text_area = "poor visibility"
         lable_load_sample = "Input a sample"
         label_results = "### Results: "
         label_search_botton = "Search"
