@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Page</title>
+    <style>
+        /* 必要に応じてスタイルを追加 */
+    </style>
+</head>
+<body>
+    <div>
+        <h2>事故原因検索</h2>
+        <form method="post">
+            <input type="text" name="message" placeholder="潮流が強く舵が効かなくなった。">
+            <button type="submit">検索</button>
+        </form>
+    </div>
+
+    <div>
+        <h2>検索結果</h2>
+        <p>{{ response }}</p>
+    </div>
+</body>
+</html>
