@@ -41,3 +41,4 @@ venv.bak/
 data/
 chatlog/
 .streamlit/secrets.toml
+.devcontainer
