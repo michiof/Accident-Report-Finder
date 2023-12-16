@@ -173,8 +173,8 @@ def main():
         make_pinecone_filter(filter_selection)
 
     if "messages" not in st.session_state:
-        st.session_state.messages = []
-    chat_page(num_of_output)
+        st.session_state['messages']= []
+    chat_page(num_of_output, language)
 
 if __name__ == "__main__":
     main()
