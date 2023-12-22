@@ -42,3 +42,5 @@ data/
 chatlog/
 .streamlit/secrets.toml
 .devcontainer
+
+Procfile
