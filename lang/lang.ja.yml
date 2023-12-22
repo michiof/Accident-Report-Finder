@@ -1,0 +1,37 @@
+ja:
+  caption_1: 入力した事故原因と類似する過去の船舶事故を検索できます。
+  caption_2: "データ出典: [運輸安全委員会](https://jtsb.mlit.go.jp/jtsb/ship/index.php)が公開している15,334件(2023年12月1日時点)の船舶事故報告書データを本プログラム用に加工して利用しています。"
+  label_num_of_output: 最大検索件数
+  label_filter_title: フィルター
+  label_filter_severity: 軽微なものを除く
+  label_filter_cat: 小型船舶を除く
+  label_msg_text_area: "検索したい事故原因を入力してください:"
+  placeholder_text_area: 潮流が強く舵が効かなくなった。
+  lable_load_sample: サンプル質問を挿入
+  label_results: "### 検索履歴: "
+  label_search_botton: 検索
+  label_reset_button: リセット
+  label_save_button: 検索結果をダウンロード
+  msg_header_search_text: "検索する原因: "
+  msg_while_searching: 検索中...
+  msg_gen_result: "検索結果を出力中..."
+  no_data_message: 事故報告書を参照します。しばらくお待ちください。
+  error_message: 再度検索してください。エラーが発生しました。
+  msg_loading: 事故調査報告書を読んでいます...
+  prompt_for_search_system: 関連データの内容を読み取って、ユーザーが入力した事故原因と原因が類似している事故を見つけます。
+  prompt_for_search_user: "
+                以下のユーザーが入力した事故原因と事故の原因が類似した事故を関連データから%{num_of_output}件見つけ出し、
+                以下に指定する出力フォーマットで出力してください。\n\n
+                ユーザーが入力した事故原因：\n
+                %{user_input}\n\n
+                関連データ：\n
+                %{related_data}\n\n
+                出力フォーマット（Markdown形式で出力してください）:\n
+                類似事故は以下のとおりです。\n\n
+                i件目\n\n
+                事故の名称：\n<Title>\n\n
+                事故の種類: \n<Type_accident>\n\n
+                事故の概要：\n<Outline>\n\n
+                事故の原因：\n<Cause>\n\n
+                報告書のURL: \n<URL>\n\n
+              "

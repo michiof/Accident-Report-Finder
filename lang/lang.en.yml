@@ -1,0 +1,38 @@
+en:
+  caption_1: You can search for past ship accidents similar to the input cause of the accident.
+  caption_2: "Data source: The program uses processed data from 15,334 ship accident reports (as of December 1, 2023) publicly available from the [Japan Transport Safety Board](https://jtsb.mlit.go.jp/jtsb/ship/index.php)."
+  label_num_of_output: "Max. search results"
+  label_filter_title: "Filter (exclude)"
+  label_filter_severity: Minor accident
+  label_filter_cat: Small craft
+  label_msg_text_area: "Please enter the cause of the accident you want to search for:"
+  placeholder_text_area: The tidal current was strong, and the rudder became ineffective.
+  lable_load_sample: Input a sample
+  label_results: "### Results: "
+  label_search_botton: Search
+  label_reset_button: Reset
+  label_save_button: Download search results.
+  msg_header_search_text: "Cause to search for:"
+  msg_while_searching: Searching...
+  msg_gen_result: Outputting search results...
+  no_data_message: I will review the contents of the accident report. Please wait for a moment.
+  error_message: Please search again. An error has occurred.
+  msg_loading: Reading an accident investigation report...
+  prompt_for_search_system: Read the content of the relevant data and find accidents that are similar to the cause of the accident entered by the user.
+  prompt_for_search_user: "
+                Please find %{num_of_output} accidents from the related data that are similar to the content entered by the user in terms of 'cause of the accident'. 
+                Then, output them in order of similarity, in the specified output format below.\n
+                If related data is written in Japanese, please translate them to English and output. Please do not output in Japanese.\n\n
+                User input:\n
+                %{user_input}\n\n
+                Related data:\n
+                %{related_data}\n\n
+                Output format (Please output in Markdown format):\n
+                The similar accidents are as follows.\n\n
+                **No. i:**\n\n
+                **Name of accident:** translate <Title> to English and output.\n\n
+                **Type of accident:**  translate <Type_accident> to English and output.\n\n
+                **Outline of accident:**  translate <Outline> to English and output.\n\n
+                **Cuase of accident:**  translate <Cause> to English and output.\n\n
+                **Report URL:**\n<URL>\n\n
+            "
