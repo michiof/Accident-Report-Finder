@@ -21,7 +21,7 @@ st.set_page_config(
    page_title="Accident Report Finder",
    page_icon="🔍",
    menu_items={
-        'About': "**Accident Report Finder** v1.2.0 made by [Michio Fujii](https://github.com/michiof)",
+        'About': "**Accident Report Finder** v1.2.1 made by [Michio Fujii](https://github.com/michiof)",
     }
 )
 
