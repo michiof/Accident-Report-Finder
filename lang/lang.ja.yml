@@ -6,7 +6,7 @@ ja:
   label_filter_severity: 軽微なものを除く
   label_filter_cat: 小型船舶を除く
   label_msg_text_area: "検索したい事故原因を入力してください:"
-  placeholder_text_area: 潮流が強く舵が効かなくなった。
+  placeholder_text_area: 潮流が強く舵が効かなかった。
   lable_load_sample: サンプル質問を挿入
   label_results: "### 検索履歴: "
   label_search_botton: 検索
