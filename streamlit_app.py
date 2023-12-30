@@ -21,7 +21,7 @@ st.set_page_config(
    page_title="Accident Report Finder",
    page_icon="🔍",
    menu_items={
-        'About': "**Accident Report Finder** v1.2.1 made by [Michio Fujii](https://github.com/michiof)",
+        'About': "**Accident Report Finder** v1.2.2 made by [Michio Fujii](https://github.com/michiof)",
     }
 )
 
@@ -70,7 +70,7 @@ def make_pinecone_filter(filter_selection):
 def get_relevant_data(query_embedding, top_k=20):
     pinecone.init(api_key=st.secrets["PINECONE_API_KEY"], environment=st.secrets["PINECONE_ENVIRONMENT"])
     pinecone_index = pinecone.Index(st.secrets["PINECONE_INDEX"])
-    token_budget = 4096 - 700 #関連データのトークン上限値の設定
+    token_budget = 4096 - 1500 #関連データのトークン上限値の設定
     relevant_data = ""
     filter_dic = st.session_state['filter_dic']
     for _ in range(3): # エラー発生時は3回までトライする
@@ -163,12 +163,12 @@ def main():
     st.write("---")
     st.sidebar.title("Accident Report Finder")
     with st.sidebar:
-        st.write("Version: 1.2.1")
+        st.write("Version: 1.2.2")
         st.write("Made by [Michio Fujii](https://github.com/michiof)")
         st.write("---")
         
         # 最大出力数の設定
-        num_of_output = st.slider(i18n.t('lang.label_num_of_output'), 1, 5, 3)
+        num_of_output = st.slider(i18n.t('lang.label_num_of_output'), 1, 3, 2)
         # filter設定
         label_filter_severity = i18n.t('lang.label_filter_severity')
         label_filter_cat = i18n.t('lang.label_filter_cat')
