@@ -160,6 +160,7 @@ def main():
 
     st.caption(i18n.t('lang.caption_1'))
     st.caption(i18n.t('lang.caption_2'))
+    st.caption(i18n.t('lang.caption_3'))
     st.write("---")
     st.sidebar.title("Accident Report Finder")
     with st.sidebar:

@@ -1,6 +1,7 @@
 ja:
   caption_1: 入力した事故原因と類似する過去の船舶事故を検索できます。
   caption_2: "データ出典: [運輸安全委員会](https://jtsb.mlit.go.jp/jtsb/ship/index.php)が公開している15,334件(2023年12月1日時点)の船舶事故報告書データを本プログラム用に加工して利用しています。"
+  caption_3: "入力された内容は類似検索のためのEmbeddingsの計算と回答文を作成するためにAPIを利用してOpenAIのサーバーにも送信されます。OpenAIのTerms of useは[こちら](https://openai.com/policies/terms-of-use)から確認できます。"
   label_num_of_output: 最大検索件数
   label_filter_title: フィルター
   label_filter_severity: 軽微なものを除く
