@@ -1,7 +1,7 @@
 en:
   caption_1: You can search for past ship accidents similar to the input cause of the accident.
   caption_2: "Data source: The program uses processed data from 15,334 ship accident reports (as of December 1, 2023) publicly available from the [Japan Transport Safety Board](https://jtsb.mlit.go.jp/jtsb/ship/index.php)."
-  caption_3: "The entered content is sent to OpenAI's servers for calculating embeddings for similarity search and for generating response sentences using an API. You can check OpenAI's Terms of Service [here](https://openai.com/policies/terms-of-use)."
+  caption_3: "The entered content is sent to OpenAI's servers for calculating embeddings for similarity search and for generating response sentences using an API. You can check [OpenAI's Terms of Service](https://openai.com/policies/terms-of-use)."
   label_num_of_output: "Max. search results"
   label_filter_title: "Filter (exclude)"
   label_filter_severity: Minor accident
