@@ -1,6 +1,6 @@
 streamlit
 pandas
 openai==1.2.1
-pinecone-client
+pinecone-client==2.*
 tiktoken
 i18nice[YAML]
