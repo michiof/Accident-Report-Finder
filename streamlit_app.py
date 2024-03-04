@@ -3,7 +3,7 @@
 import streamlit as st
 import pandas as pd
 from openai import OpenAI
-import pinecone
+from pinecone import Pinecone
 import tiktoken
 import i18n
 
@@ -68,8 +68,8 @@ def make_pinecone_filter(filter_selection):
 
 # 類似ベクトルデータの抽出
 def get_relevant_data(query_embedding, top_k=20):
-    pinecone.init(api_key=st.secrets["PINECONE_API_KEY"], environment=st.secrets["PINECONE_ENVIRONMENT"])
-    pinecone_index = pinecone.Index(st.secrets["PINECONE_INDEX"])
+    pc = Pinecone(api_key=st.secrets["PINECONE_API_KEY"])
+    pinecone_index = pc.Index(st.secrets["PINECONE_INDEX"])
     token_budget = 4096 - 1500 #関連データのトークン上限値の設定
     relevant_data = ""
     filter_dic = st.session_state['filter_dic']
@@ -164,7 +164,7 @@ def main():
     st.write("---")
     st.sidebar.title("Accident Report Finder")
     with st.sidebar:
-        st.write("Version: 1.2.2")
+        st.write("Version: 1.2.3")
         st.write("Made by [Michio Fujii](https://github.com/michiof)")
         st.write("---")
         
