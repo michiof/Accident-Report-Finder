@@ -6,14 +6,19 @@ en:
   label_filter_title: "Filter (exclude)"
   label_filter_severity: Minor accident
   label_filter_cat: Small craft
+  label_operataion_mode: Operation Mode
+  label_operation_mode_search: Accident Search
+  label_operation_mode_prediction: Accident Prediction (beta)
   label_msg_text_area: "Please enter the cause of the accident you want to search for:"
   placeholder_text_area: The tidal current was strong, and the rudder became ineffective.
   lable_load_sample: Input a sample
   label_results: "### Results: "
   label_search_botton: Search
+  label_prediction_botton: Prediction
   label_reset_button: Reset
   label_save_button: Download search results.
   msg_header_search_text: "Cause to search for:"
+  msg_header_prediction_text: "Prediction to search for: "
   msg_while_searching: Searching...
   msg_gen_result: Outputting search results...
   no_data_message: I will review the contents of the accident report. Please wait for a moment.

@@ -21,7 +21,7 @@ st.set_page_config(
    page_title="Accident Report Finder",
    page_icon="🔍",
    menu_items={
-        'About': "**Accident Report Finder** v1.2.2 made by [Michio Fujii](https://github.com/michiof)",
+        'About': "**Accident Report Finder** v2.0.0 made by [Michio Fujii](https://github.com/michiof)",
     }
 )
 
@@ -108,15 +108,23 @@ def cal_embedding(user_input, model=EMBEDDING_MODEL):
     raise Exception("Failed to calculate embedding after 3 attempts")
 
 # 検索画面での処理
-def chat_page(num_of_output):
+def chat_page(num_of_output, operation_mode):
     new_msg = st.text_input(i18n.t('lang.label_msg_text_area'), value=st.session_state.sample_question, placeholder=i18n.t('lang.placeholder_text_area'))
     if st.button(i18n.t('lang.lable_load_sample')):
         st.session_state.sample_question = i18n.t('lang.placeholder_text_area') # load a sample question
-    if st.button(i18n.t('lang.label_search_botton')):
+
+    if operation_mode == "Prediction":
+        button_label = i18n.t('lang.label_prediction_botton')
+        user_msg_header = i18n.t('lang.msg_header_prediction_text')
+    else:
+        button_label = i18n.t('lang.label_search_botton')
+        user_msg_header = i18n.t('lang.msg_header_search_text')
+
+    if st.button(button_label):
         if new_msg:
             try:
                 with st.spinner(i18n.t('lang.msg_while_searching')):
-                    user_input = f"{i18n.t('lang.msg_header_search_text')}{new_msg}"
+                    user_input = f"{user_msg_header}{new_msg}"
                     user_input_emb = cal_embedding(new_msg)
                     CHAT_INPUT_MESSAGES = make_message(user_input, user_input_emb, num_of_output)
                 with st.spinner(i18n.t('lang.msg_gen_result')):
@@ -164,12 +172,28 @@ def main():
     st.write("---")
     st.sidebar.title("Accident Report Finder")
     with st.sidebar:
-        st.write("Version: 1.2.3")
+        st.write("Version: 2.0.0")
         st.write("Made by [Michio Fujii](https://github.com/michiof)")
         st.write("---")
+
+        # 動作モードの設定
+        label_operation_mode_search = i18n.t('lang.label_operation_mode_search')
+        label_operation_mode_prediction = i18n.t('lang.label_operation_mode_prediction')
+        operation_mode_label = st.selectbox(
+            i18n.t('lang.label_operataion_mode'),
+            (
+                label_operation_mode_search, 
+                label_operation_mode_prediction
+            )
+        )
+        operation_mode = operation_mode_label.replace(label_operation_mode_search,"Search").replace(label_operation_mode_prediction, "Prediction")
         
         # 最大出力数の設定
-        num_of_output = st.slider(i18n.t('lang.label_num_of_output'), 1, 3, 2)
+        if operation_mode == "Search":
+            num_of_output = st.slider(i18n.t('lang.label_num_of_output'), 1, 3, 2)
+        else:
+            num_of_output = 0 #Prediction modeでは利用していない数字
+
         # filter設定
         label_filter_severity = i18n.t('lang.label_filter_severity')
         label_filter_cat = i18n.t('lang.label_filter_cat')
@@ -185,7 +209,7 @@ def main():
     if 'sample_question' not in st.session_state:
         st.session_state['sample_question'] = ""
 
-    chat_page(num_of_output)
+    chat_page(num_of_output, operation_mode)
 
 if __name__ == "__main__":
     main()
