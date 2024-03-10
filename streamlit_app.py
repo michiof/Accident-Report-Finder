@@ -145,17 +145,16 @@ def chat_page(num_of_output, operation_mode):
                     related_data = get_relevant_data(user_input_emb)
                     CHAT_INPUT_MESSAGES = make_message(user_input, related_data, num_of_output, operation_mode)
                 with st.spinner(msg_while_outputing_result):
-                    response_all = ""
-                    temp_placeholder = st.empty()
-                    stream = client.chat.completions.create(model=GPT_MODEL,messages=CHAT_INPUT_MESSAGES, temperature=0.0, stream=True)
-                    for part in stream:
-                        response_delta = (part.choices[0].delta.content or "")
-                        response_all += response_delta
-                        temp_placeholder.write(response_all)
+                    stream = client.chat.completions.create(
+                        model=GPT_MODEL,
+                        messages=CHAT_INPUT_MESSAGES,
+                        temperature=0.0,
+                        stream=True,
+                    )
+                    response = st.write_stream(stream)
                 st.session_state.messages.append("---")
-                st.session_state.messages.append(response_all)
+                st.session_state.messages.append(response)
                 st.session_state.messages.append(user_input)
-                temp_placeholder.empty() #Stream部分の非表示
                 st.empty()
             except Exception as e:
                 print(str(e))
