@@ -11,7 +11,7 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"],)
 
 # OpenAIのモデルの定義
 EMBEDDING_MODEL = "text-embedding-ada-002"
-GPT_MODEL = "gpt-3.5-turbo"
+GPT_MODEL = "gpt-4-1106-preview"
 
 # 言語ファイルのパス
 i18n.load_path.append('./lang')
@@ -26,16 +26,26 @@ st.set_page_config(
 )
 
 # プロンプトを作成する
-def make_message(user_input, user_input_emb, num_of_output):
-    related_data = get_relevant_data(user_input_emb)
+def make_message(user_input, related_data, num_of_output, opration_mode):
+    if opration_mode == "Prediction":
+        prompt_system = i18n.t('lang.prompt_for_prediction_system')
+        prompt_user = i18n.t(
+            'lang.prompt_for_prediction_user',
+            user_input=user_input, 
+            related_data=related_data
+        )
+    else:
+        prompt_system = i18n.t('lang.prompt_for_search_system')
+        prompt_user = i18n.t(
+            'lang.prompt_for_search_user',
+            num_of_output=num_of_output, 
+            user_input=user_input, 
+            related_data=related_data
+        )
     messages = [
-        {"role": "system", "content": i18n.t('lang.prompt_for_search_system')},
-        {"role": "user", "content": i18n.t('lang.prompt_for_search_user', 
-                                            num_of_output=num_of_output, 
-                                            user_input=user_input, 
-                                            related_data=related_data
-                                        )},
-    ]
+            {"role": "system", "content": prompt_system},
+            {"role": "user", "content": prompt_user},
+        ]
     return messages
 
 # トークン数を計算する
@@ -116,18 +126,23 @@ def chat_page(num_of_output, operation_mode):
     if operation_mode == "Prediction":
         button_label = i18n.t('lang.label_prediction_botton')
         user_msg_header = i18n.t('lang.msg_header_prediction_text')
+        msg_while_generating = i18n.t('lang.msg_while_predicting')
+        msg_while_outputing_result = i18n.t('lang.msg_predicting_result')
     else:
         button_label = i18n.t('lang.label_search_botton')
         user_msg_header = i18n.t('lang.msg_header_search_text')
+        msg_while_generating = i18n.t('lang.msg_while_searching')
+        msg_while_outputing_result = i18n.t('lang.msg_gen_result')
 
     if st.button(button_label):
         if new_msg:
             try:
-                with st.spinner(i18n.t('lang.msg_while_searching')):
+                with st.spinner(msg_while_generating):
                     user_input = f"{user_msg_header}{new_msg}"
                     user_input_emb = cal_embedding(new_msg)
-                    CHAT_INPUT_MESSAGES = make_message(user_input, user_input_emb, num_of_output)
-                with st.spinner(i18n.t('lang.msg_gen_result')):
+                    related_data = get_relevant_data(user_input_emb)
+                    CHAT_INPUT_MESSAGES = make_message(user_input, related_data, num_of_output, operation_mode)
+                with st.spinner(msg_while_outputing_result):
                     response_all = ""
                     temp_placeholder = st.empty()
                     stream = client.chat.completions.create(model=GPT_MODEL,messages=CHAT_INPUT_MESSAGES, temperature=0.0, stream=True)
@@ -165,12 +180,6 @@ def main():
         i18n.set('locale', 'ja')
     else:
         i18n.set('locale', 'en')
-
-    st.caption(i18n.t('lang.caption_1'))
-    st.caption(i18n.t('lang.caption_2'))
-    st.caption(i18n.t('lang.caption_3'))
-    st.write("---")
-    st.sidebar.title("Accident Report Finder")
     with st.sidebar:
         st.write("Version: 2.0.0")
         st.write("Made by [Michio Fujii](https://github.com/michiof)")

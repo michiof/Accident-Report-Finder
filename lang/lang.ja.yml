@@ -1,7 +1,7 @@
 ja:
-  caption_1: 入力した事故原因と類似する過去の船舶事故を検索できます。
+  caption_1: 入力した事故原因と類似する過去の船舶事故を検索したり、入力したヒヤリハットの内容をもとに、発生可能性のある事故を予測します。
   caption_2: "データ出典: [運輸安全委員会](https://jtsb.mlit.go.jp/jtsb/ship/index.php)が公開している15,334件(2023年12月1日時点)の船舶事故報告書データを本プログラム用に加工して利用しています。"
-  caption_3: "入力された内容は類似検索のためのEmbeddingsの計算と回答文を作成するためにAPIを利用してOpenAIのサーバーにも送信されます。OpenAIのTerms of useは[こちら](https://openai.com/policies/terms-of-use)から確認できます。"
+  caption_3: "入力された内容はEmbeddings計算と回答文を作成するためにOpenAIのAPIサーバーにも送信されます。OpenAIのTerms of useは[こちら](https://openai.com/policies/terms-of-use)から確認できます。"
   label_num_of_output: 最大検索件数
   label_filter_title: フィルター
   label_filter_severity: 軽微なものを除く
@@ -12,15 +12,17 @@ ja:
   label_msg_text_area: "検索したい事故原因を入力してください:"
   placeholder_text_area: 潮流が強く舵が効かなかった。
   lable_load_sample: サンプル質問を挿入
-  label_results: "### 検索履歴: "
+  label_results: "### 出力結果: "
   label_search_botton: 検索
   label_prediction_botton: 事故予測
   label_reset_button: リセット
-  label_save_button: 検索結果をダウンロード
+  label_save_button: 結果をダウンロード
   msg_header_search_text: "検索する原因: "
   msg_header_prediction_text: "検討するヒヤリハット: "
   msg_while_searching: 検索中...
+  msg_while_predicting: 予想中...
   msg_gen_result: "検索結果を出力中..."
+  msg_predicting_result: "推測結果を出力中..."
   no_data_message: 事故報告書を参照します。しばらくお待ちください。
   error_message: 再度検索してください。エラーが発生しました。
   msg_loading: 事故調査報告書を読んでいます...
@@ -40,4 +42,13 @@ ja:
                 事故の概要：\n<Outline>\n\n
                 事故の原因：\n<Cause>\n\n
                 報告書のURL: \n<URL>\n\n
+              "
+  prompt_for_prediction_system: ヒヤリハットの内容と過去の事故の原因を参照して、船舶事故を防ぐ安全対策をアドバイスします。
+  prompt_for_prediction_user: "
+                以下のヒヤリハットはどのような事故に発展する可能性がありましたか？関連データを参照して、原因が似ている事故から推測してください。\n\n
+                ヒヤリハット:\n%{user_input}\n\n関連事故データ:\n%{related_data}\n\n
+                出力フォーマット（Markdown形式で出力してください）:\n
+                関連する過去事故：\n<ヒヤリハットと原因が似ている事故の内容>
+                予想される事故：\n<ヒヤリハットから予想される事故の内容>
+                安全対策：\n<安全対策の内容>
               "
