@@ -1,21 +1,29 @@
 en:
-  caption_1: You can search for past ship accidents similar to the input cause of the accident.
+  caption_1: You can search for past ship accidents similar to the input cause of the accident.Based on the near-miss incidents reported, the bot will predict potential accidents that could occur.
   caption_2: "Data source: The program uses processed data from 15,334 ship accident reports (as of December 1, 2023) publicly available from the [Japan Transport Safety Board](https://jtsb.mlit.go.jp/jtsb/ship/index.php)."
   caption_3: "The entered content is sent to OpenAI's servers for calculating embeddings for similarity search and for generating response sentences using an API. You can check [OpenAI's Terms of Service](https://openai.com/policies/terms-of-use)."
   label_num_of_output: "Max. search results"
   label_filter_title: "Filter (exclude)"
   label_filter_severity: Minor accident
   label_filter_cat: Small craft
-  label_msg_text_area: "Please enter the cause of the accident you want to search for:"
+  label_operataion_mode: Operation Mode
+  label_operation_mode_search: Accident Search
+  label_operation_mode_prediction: Accident Prediction (beta)
+  label_msg_text_area_search: "Please enter the cause of the accident you want to search for:"
+  label_msg_text_area_prediction: "Please input the near-miss incidents you wish to analyze for accident prediction:"
   placeholder_text_area: The tidal current was strong, and the rudder became ineffective.
   lable_load_sample: Input a sample
   label_results: "### Results: "
   label_search_botton: Search
+  label_prediction_botton: Prediction
   label_reset_button: Reset
   label_save_button: Download search results.
   msg_header_search_text: "Cause to search for:"
+  msg_header_prediction_text: "Prediction to search for: "
   msg_while_searching: Searching...
+  msg_while_predicting: Predicting...
   msg_gen_result: Outputting search results...
+  msg_predicting_result: "Outputing a predicting result..."
   no_data_message: I will review the contents of the accident report. Please wait for a moment.
   error_message: Please search again. An error has occurred.
   msg_loading: Reading an accident investigation report...
@@ -37,3 +45,12 @@ en:
                 **Cuase of accident:**  translate <Cause> to English and output.\n\n
                 **Report URL:**\n<URL>\n\n
             "
+  prompt_for_prediction_system: Advice on safety measures to the near-misses is provided by referring to the causes of past accidents.
+  prompt_for_prediction_user: "
+                Can you please analyze the potential accidents that the following near-miss incident could have led to?\n
+                Please infer by referencing related accident data and identifying similar causes.\n\n
+                Near-Miss Incident:\n
+                %{user_input}\n\n
+                Related Accident Data:\n
+                %{related_data}\n\n
+              "

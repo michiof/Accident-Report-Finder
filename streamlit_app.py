@@ -11,31 +11,41 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"],)
 
 # OpenAIのモデルの定義
 EMBEDDING_MODEL = "text-embedding-ada-002"
-GPT_MODEL = "gpt-3.5-turbo"
+GPT_MODEL = "gpt-4-1106-preview"
 
 # 言語ファイルのパス
 i18n.load_path.append('./lang')
 
 # Streamlit setup
 st.set_page_config(
-   page_title="Accident Report Finder",
+   page_title="Accident Finder and Predictor",
    page_icon="🔍",
    menu_items={
-        'About': "**Accident Report Finder** v1.2.2 made by [Michio Fujii](https://github.com/michiof)",
+        'About': "**Accident Finder and Predictor** v2.0.0 made by [Michio Fujii](https://github.com/michiof)",
     }
 )
 
 # プロンプトを作成する
-def make_message(user_input, user_input_emb, num_of_output):
-    related_data = get_relevant_data(user_input_emb)
+def make_message(user_input, related_data, num_of_output, opration_mode):
+    if opration_mode == "Prediction":
+        prompt_system = i18n.t('lang.prompt_for_prediction_system')
+        prompt_user = i18n.t(
+            'lang.prompt_for_prediction_user',
+            user_input=user_input, 
+            related_data=related_data
+        )
+    else:
+        prompt_system = i18n.t('lang.prompt_for_search_system')
+        prompt_user = i18n.t(
+            'lang.prompt_for_search_user',
+            num_of_output=num_of_output, 
+            user_input=user_input, 
+            related_data=related_data
+        )
     messages = [
-        {"role": "system", "content": i18n.t('lang.prompt_for_search_system')},
-        {"role": "user", "content": i18n.t('lang.prompt_for_search_user', 
-                                            num_of_output=num_of_output, 
-                                            user_input=user_input, 
-                                            related_data=related_data
-                                        )},
-    ]
+            {"role": "system", "content": prompt_system},
+            {"role": "user", "content": prompt_user},
+        ]
     return messages
 
 # トークン数を計算する
@@ -108,18 +118,33 @@ def cal_embedding(user_input, model=EMBEDDING_MODEL):
     raise Exception("Failed to calculate embedding after 3 attempts")
 
 # 検索画面での処理
-def chat_page(num_of_output):
-    new_msg = st.text_input(i18n.t('lang.label_msg_text_area'), value=st.session_state.sample_question, placeholder=i18n.t('lang.placeholder_text_area'))
+def chat_page(num_of_output, operation_mode):
+    if operation_mode == "Prediction":
+        label_msg_text_area = i18n.t('lang.label_msg_text_area_prediction')
+        button_label = i18n.t('lang.label_prediction_botton')
+        user_msg_header = i18n.t('lang.msg_header_prediction_text')
+        msg_while_generating = i18n.t('lang.msg_while_predicting')
+        msg_while_outputing_result = i18n.t('lang.msg_predicting_result')
+    else:
+        label_msg_text_area = i18n.t('lang.label_msg_text_area_search')
+        button_label = i18n.t('lang.label_search_botton')
+        user_msg_header = i18n.t('lang.msg_header_search_text')
+        msg_while_generating = i18n.t('lang.msg_while_searching')
+        msg_while_outputing_result = i18n.t('lang.msg_gen_result')
+
+    new_msg = st.text_input(label_msg_text_area, value=st.session_state.sample_question, placeholder=i18n.t('lang.placeholder_text_area'))
     if st.button(i18n.t('lang.lable_load_sample')):
         st.session_state.sample_question = i18n.t('lang.placeholder_text_area') # load a sample question
-    if st.button(i18n.t('lang.label_search_botton')):
+
+    if st.button(button_label):
         if new_msg:
             try:
-                with st.spinner(i18n.t('lang.msg_while_searching')):
-                    user_input = f"{i18n.t('lang.msg_header_search_text')}{new_msg}"
+                with st.spinner(msg_while_generating):
+                    user_input = f"{user_msg_header}{new_msg}"
                     user_input_emb = cal_embedding(new_msg)
-                    CHAT_INPUT_MESSAGES = make_message(user_input, user_input_emb, num_of_output)
-                with st.spinner(i18n.t('lang.msg_gen_result')):
+                    related_data = get_relevant_data(user_input_emb)
+                    CHAT_INPUT_MESSAGES = make_message(user_input, related_data, num_of_output, operation_mode)
+                with st.spinner(msg_while_outputing_result):
                     response_all = ""
                     temp_placeholder = st.empty()
                     stream = client.chat.completions.create(model=GPT_MODEL,messages=CHAT_INPUT_MESSAGES, temperature=0.0, stream=True)
@@ -151,25 +176,35 @@ def chat_page(num_of_output):
     st.download_button(i18n.t('lang.label_save_button'), output_messages)
 
 def main():
-    st.title("🔍 Accident Report Finder")
+    st.title("🔍 Accident Finder / Predictor")
     language_selection = st.radio("Language", ("English", "日本語"), horizontal=True)
     if language_selection == "日本語":
         i18n.set('locale', 'ja')
     else:
         i18n.set('locale', 'en')
-
-    st.caption(i18n.t('lang.caption_1'))
-    st.caption(i18n.t('lang.caption_2'))
-    st.caption(i18n.t('lang.caption_3'))
-    st.write("---")
-    st.sidebar.title("Accident Report Finder")
     with st.sidebar:
-        st.write("Version: 1.2.3")
+        st.write("Version: 2.0.0")
         st.write("Made by [Michio Fujii](https://github.com/michiof)")
         st.write("---")
+
+        # 動作モードの設定
+        label_operation_mode_search = i18n.t('lang.label_operation_mode_search')
+        label_operation_mode_prediction = i18n.t('lang.label_operation_mode_prediction')
+        operation_mode_label = st.selectbox(
+            i18n.t('lang.label_operataion_mode'),
+            (
+                label_operation_mode_search, 
+                label_operation_mode_prediction
+            )
+        )
+        operation_mode = operation_mode_label.replace(label_operation_mode_search,"Search").replace(label_operation_mode_prediction, "Prediction")
         
         # 最大出力数の設定
-        num_of_output = st.slider(i18n.t('lang.label_num_of_output'), 1, 3, 2)
+        if operation_mode == "Search":
+            num_of_output = st.slider(i18n.t('lang.label_num_of_output'), 1, 3, 2)
+        else:
+            num_of_output = 0 #Prediction modeでは利用していない数字
+
         # filter設定
         label_filter_severity = i18n.t('lang.label_filter_severity')
         label_filter_cat = i18n.t('lang.label_filter_cat')
@@ -185,7 +220,7 @@ def main():
     if 'sample_question' not in st.session_state:
         st.session_state['sample_question'] = ""
 
-    chat_page(num_of_output)
+    chat_page(num_of_output, operation_mode)
 
 if __name__ == "__main__":
     main()
