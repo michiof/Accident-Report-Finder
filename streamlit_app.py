@@ -18,10 +18,10 @@ i18n.load_path.append('./lang')
 
 # Streamlit setup
 st.set_page_config(
-   page_title="Accident Report Finder",
+   page_title="Accident Finder and Predictor",
    page_icon="🔍",
    menu_items={
-        'About': "**Accident Report Finder** v2.0.0 made by [Michio Fujii](https://github.com/michiof)",
+        'About': "**Accident Finder and Predictor** v2.0.0 made by [Michio Fujii](https://github.com/michiof)",
     }
 )
 
@@ -119,20 +119,22 @@ def cal_embedding(user_input, model=EMBEDDING_MODEL):
 
 # 検索画面での処理
 def chat_page(num_of_output, operation_mode):
-    new_msg = st.text_input(i18n.t('lang.label_msg_text_area'), value=st.session_state.sample_question, placeholder=i18n.t('lang.placeholder_text_area'))
-    if st.button(i18n.t('lang.lable_load_sample')):
-        st.session_state.sample_question = i18n.t('lang.placeholder_text_area') # load a sample question
-
     if operation_mode == "Prediction":
+        label_msg_text_area = i18n.t('lang.label_msg_text_area_prediction')
         button_label = i18n.t('lang.label_prediction_botton')
         user_msg_header = i18n.t('lang.msg_header_prediction_text')
         msg_while_generating = i18n.t('lang.msg_while_predicting')
         msg_while_outputing_result = i18n.t('lang.msg_predicting_result')
     else:
+        label_msg_text_area = i18n.t('lang.label_msg_text_area_search')
         button_label = i18n.t('lang.label_search_botton')
         user_msg_header = i18n.t('lang.msg_header_search_text')
         msg_while_generating = i18n.t('lang.msg_while_searching')
         msg_while_outputing_result = i18n.t('lang.msg_gen_result')
+
+    new_msg = st.text_input(label_msg_text_area, value=st.session_state.sample_question, placeholder=i18n.t('lang.placeholder_text_area'))
+    if st.button(i18n.t('lang.lable_load_sample')):
+        st.session_state.sample_question = i18n.t('lang.placeholder_text_area') # load a sample question
 
     if st.button(button_label):
         if new_msg:
@@ -174,7 +176,7 @@ def chat_page(num_of_output, operation_mode):
     st.download_button(i18n.t('lang.label_save_button'), output_messages)
 
 def main():
-    st.title("🔍 Accident Report Finder")
+    st.title("🔍 Accident Finder / Predictor")
     language_selection = st.radio("Language", ("English", "日本語"), horizontal=True)
     if language_selection == "日本語":
         i18n.set('locale', 'ja')

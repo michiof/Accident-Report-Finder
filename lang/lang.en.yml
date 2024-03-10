@@ -9,7 +9,8 @@ en:
   label_operataion_mode: Operation Mode
   label_operation_mode_search: Accident Search
   label_operation_mode_prediction: Accident Prediction (beta)
-  label_msg_text_area: "Please enter the cause of the accident you want to search for:"
+  label_msg_text_area_search: "Please enter the cause of the accident you want to search for:"
+  label_msg_text_area_prediction: "Please input the near-miss incidents you wish to analyze for accident prediction:"
   placeholder_text_area: The tidal current was strong, and the rudder became ineffective.
   lable_load_sample: Input a sample
   label_results: "### Results: "
